@@ -1,60 +1,119 @@
-// MENU MOBILE
-const menuToggle = document.getElementById("menuToggle");
-const nav = document.getElementById("nav");
+/* =========================================
+   MENU MOBILE
+========================================= */
 
-menuToggle.addEventListener("click", () => {
-    nav.classList.toggle("active");
+const menuBtn = document.getElementById("menuBtn");
+const menu = document.getElementById("menu");
 
-    if (nav.classList.contains("active")) {
-        menuToggle.textContent = "✕";
-    } else {
-        menuToggle.textContent = "☰";
-    }
+menuBtn.addEventListener("click", () => {
+
+    menu.classList.toggle("active");
+
 });
 
-// FECHAR MENU AO CLICAR EM UM LINK
-document.querySelectorAll(".nav a").forEach((link) => {
+
+/* =========================================
+   FECHAR MENU AO CLICAR
+========================================= */
+
+const links = document.querySelectorAll(".menu a");
+
+links.forEach(link => {
+
     link.addEventListener("click", () => {
-        nav.classList.remove("active");
-        menuToggle.textContent = "☰";
+
+        menu.classList.remove("active");
+
     });
+
 });
 
-// ANO AUTOMÁTICO NO RODAPÉ
-const year = document.getElementById("year");
 
-if (year) {
-    year.textContent = new Date().getFullYear();
+/* =========================================
+   ANO AUTOMÁTICO
+========================================= */
+
+const ano = document.getElementById("ano");
+
+if (ano) {
+
+    ano.textContent =
+        new Date().getFullYear();
+
 }
 
-// ANIMAÇÕES AO ROLAR A PÁGINA
-const revealElements = document.querySelectorAll(".reveal");
 
-const observer = new IntersectionObserver(
-    (entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                observer.unobserve(entry.target);
-            }
-        });
-    },
-    {
-        threshold: 0.12
+/* =========================================
+   ANIMAÇÃO AO ENTRAR NA TELA
+========================================= */
+
+const elementos =
+    document.querySelectorAll(
+        ".offer-card, .menu-card, .event, .gallery-item"
+    );
+
+
+const observador =
+    new IntersectionObserver(
+
+        (entradas) => {
+
+            entradas.forEach(entrada => {
+
+                if (entrada.isIntersecting) {
+
+                    entrada.target.classList.add(
+                        "aparecer"
+                    );
+
+                    observador.unobserve(
+                        entrada.target
+                    );
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold: 0.12
+        }
+
+    );
+
+
+elementos.forEach(elemento => {
+
+    elemento.style.opacity = "0";
+
+    elemento.style.transform =
+        "translateY(25px)";
+
+    elemento.style.transition =
+        "opacity .7s ease, transform .7s ease";
+
+    observador.observe(elemento);
+
+});
+
+
+/* =========================================
+   CLASSE DE ANIMAÇÃO
+========================================= */
+
+const estiloAnimacao =
+    document.createElement("style");
+
+estiloAnimacao.textContent = `
+
+    .aparecer {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
     }
+
+`;
+
+document.head.appendChild(
+    estiloAnimacao
 );
-
-revealElements.forEach((element) => {
-    observer.observe(element);
-});
-
-// EFEITO NO CABEÇALHO AO ROLAR
-const header = document.querySelector(".header");
-
-window.addEventListener("scroll", () => {
-    if (window.scrollY > 30) {
-        header.style.boxShadow = "0 8px 25px rgba(37, 34, 30, 0.08)";
-    } else {
-        header.style.boxShadow = "none";
-    }
-});
